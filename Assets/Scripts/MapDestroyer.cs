@@ -16,58 +16,86 @@ public class MapDestroyer : MonoBehaviour
 
     public void Explode(Vector2 worldPos)
     {
-        Vector3Int originCell = tilemap.WorldToCell(worldPos);
+        var originCell = tilemap.WorldToCell(worldPos);
         ExplodeCell(originCell);
         for (int i = 1; i <= power; i++)
         {
-            Vector3Int rightCell = originCell + new Vector3Int(i, 0, 0);
-            if (getTile(rightCell) == wallTile) break;
-            if (getTile(rightCell) == destructibleTile)
+            var rightCell = originCell + new Vector3Int(i, 0, 0);
+            var tile = getTile(rightCell);
+            if (tile == null)
+            {
+                ExplodeCell(rightCell);
+            }
+            if (tile == destructibleTile)
             {
                 ExplodeCell(rightCell);
                 break;
             }
-            ExplodeCell(rightCell);
+            if (tile == wallTile)
+            {
+                break;
+            }
         }
         for (int i = 1; i <= power; i++)
         {
-            Vector3Int leftCell = originCell + new Vector3Int(-i, 0, 0);
-            if (getTile(leftCell) == wallTile) break;
-            if (getTile(leftCell) == destructibleTile)
+            var leftCell = originCell + new Vector3Int(-i, 0, 0);
+            var tile = getTile(leftCell);
+            if (tile == null)
+            {
+                ExplodeCell(leftCell);
+            }
+            if (tile == destructibleTile)
             {
                 ExplodeCell(leftCell);
                 break;
             }
-            ExplodeCell(leftCell);
+            if (tile == wallTile)
+            {
+                break;
+            }
         }
         for (int i = 1; i <= power; i++)
         {
-            Vector3Int topCell = originCell + new Vector3Int(0, i, 0);
-            if (getTile(topCell) == wallTile) break;
-            if (getTile(topCell) == destructibleTile)
+            var topCell = originCell + new Vector3Int(0, i, 0);
+            var tile = getTile(topCell);
+            if (tile == null)
+            {
+                ExplodeCell(topCell);
+            }
+            if (tile == destructibleTile)
             {
                 ExplodeCell(topCell);
                 break;
             }
-            ExplodeCell(topCell);
+            if (tile == wallTile)
+            {
+                break;
+            }
         }
         for (int i = 1; i <= power; i++)
         {
-            Vector3Int bottomCell = originCell + new Vector3Int(0, -i, 0);
-            if (getTile(bottomCell) == wallTile) break;
-            if (getTile(bottomCell) == destructibleTile)
+            var bottomCell = originCell + new Vector3Int(0, -i, 0);
+            var tile = getTile(bottomCell);
+            if (tile == null)
+            {
+                ExplodeCell(bottomCell);
+            }
+            if (tile == destructibleTile)
             {
                 ExplodeCell(bottomCell);
                 break;
             }
-            ExplodeCell(bottomCell);
+            if (tile == wallTile)
+            {
+                break;
+            }
         }
     }
 
     public void ExplodeCell(Vector3Int cell)
     {
         tilemap.SetTile(cell, null);
-        Vector3 pos = tilemap.GetCellCenterWorld(cell);
+        var pos = tilemap.GetCellCenterWorld(cell);
         Instantiate(explosionPrefab, pos, Quaternion.identity);
     }
 
